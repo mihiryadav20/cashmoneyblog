@@ -8,10 +8,19 @@ generator client {
 }
 
 model User {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  id        String   @id @default(cuid()) @map("_id")
   username  String   @unique
   email     String   @unique
   password  String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  
+  profile   Profile?
+}
+
+model Profile {
+  id     String @id @default(cuid()) @map("_id")
+  bio    String?
+  user   User   @relation(fields: [userId], references: [id])
+  userId String @unique
 }
